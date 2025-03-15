@@ -4,6 +4,7 @@ from agentx.scraper import scrape_website
 from agentx.rag_utils import vec_store, retrieval
 from agentx.content_update import process_update
 from agentx.content_addition import process_add
+from agentx.error_link import check_broken_links
 import json 
 
 app = Flask(__name__)
@@ -52,6 +53,28 @@ def add():
         return jsonify(suggestions)
    except Exception as e:
       return jsonify({"error": str(e)}), 500
+
+@app.route('/errorlink', methods=["GET"])
+def errorlink():
+    url = request.args.get("url")
+    if not url:
+        return jsonify({"error": "URL parameter is required"}), 400
+
+    try:
+        scraped = scrape_website(url)
+        
+        # Ensure that the response is a valid JSON string before parsing.
+        try:
+            scraped_data = json.loads(scraped)
+        except json.JSONDecodeError:
+            return jsonify({"error": "Invalid JSON response from scraper"}), 500
+        
+        broken_links = check_broken_links(scraped_data, base_url=url)
+        return jsonify({"broken_links": broken_links})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 
 
 

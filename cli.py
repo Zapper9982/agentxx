@@ -66,7 +66,35 @@ def scrape():
         process.terminate()
         process.wait()
 
-   
+
+@app.command()
+def brokenlink():
+
+    url = typer.prompt("Enter the website URL")
+
+    try:
+        process = subprocess.Popen(["python", "api.py"],
+                                   stdout=subprocess.PIPE,
+                                   stderr=subprocess.PIPE)
+    except Exception as e:
+        typer.echo(f"Failed to start the API server: {e}")
+        raise e
+
+    time.sleep(2)
+    
+    typer.echo("Flask API server started in the background.")
+    typer.echo(f"Access the scraped JSON at: http://127.0.0.1:5000/errorlink?url={url}")
+    typer.echo("Press Ctrl+C to exit and stop the API server.")
+    
+    try:
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        typer.echo("Exiting CLI and terminating API server...")
+        process.terminate()
+        process.wait()
+
+
 
 @app.command()
 def fix_errors():
