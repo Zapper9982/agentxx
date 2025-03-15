@@ -33,14 +33,14 @@ def scrape_website(url: str) -> str:
                   
                     current_section = {
                         "id": f"section_{section_count}",
-                        "text": element.get_text(" ", strip=True),
+                        "content": element.get_text(" ", strip=True),
                         "links": []
                     }
               
                     for a in element.find_all("a", href=True):
                         current_section["links"].append({
                             "href": a.get("href"),
-                            "text": a.get_text(strip=True)
+                            "content": a.get_text(strip=True)
                         })
                 elif element.name == "p":
                  
@@ -48,16 +48,16 @@ def scrape_website(url: str) -> str:
                         section_count += 1
                         current_section = {
                             "id": f"section_{section_count}",
-                            "text": "",
+                            "content": "",
                             "links": []
                         }
                 
-                    current_section["text"] += " " + element.get_text(" ", strip=True)
+                    current_section["content"] += " " + element.get_text(" ", strip=True)
   
                     for a in element.find_all("a", href=True):
                         current_section["links"].append({
                             "href": a.get("href"),
-                            "text": a.get_text(strip=True)
+                            "content": a.get_text(strip=True)
                         })
  
             if current_section:
