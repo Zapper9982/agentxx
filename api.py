@@ -1,4 +1,5 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template_string
+from agentx.seo import analyze_seo, get_keyword_suggestions, optimize_metadata
 from agentx.scraper import scrape_website
 from agentx.rag_utils import vec_store, retrieval
 from agentx.content_update import process_update
@@ -55,6 +56,4 @@ def add():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
-
-    
+    app.run(debug=True, host="127.0.0.1", port=5000)
