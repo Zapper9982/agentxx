@@ -3,7 +3,7 @@ import os
 import re
 import google.generativeai as genai
 from dotenv import load_dotenv
-from rag_utils import vec_store, retrieval
+from agentx.rag_utils import vec_store, retrieval
 
 load_dotenv()
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
@@ -61,7 +61,7 @@ def query_gemini(prompt):
         })
 
 
-def process(sdata):
+def process_update(sdata):
     index, embeddings, texts = vec_store(sdata)
     result = []
 
@@ -88,20 +88,12 @@ def process(sdata):
 
 
 
-def save(sugesstion, out="suggested.json"):
-    with open(out, "w", encoding="utf-8") as f:
-        json.dump(sugesstion, f, indent=2, ensure_ascii=False)
-    
-    print(f"Sugesstions saved")
-
-
 def main():
     input = "testscrape.json"
     output= f"sugesstion_output.json"
 
     sdata = load_data(input)
-    sugesstions = process(sdata)
-    save(sugesstions, output)
+    sugesstions = process_update(sdata)
 
 if __name__ == "__main__":
     main()
