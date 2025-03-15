@@ -3,7 +3,7 @@ import requests
 import os
 import faiss
 import numpy as np
-
+import re
 from dotenv import load_dotenv
 from datetime import datetime
 from sentence_transformers import SentenceTransformer
@@ -65,15 +65,16 @@ def query_gemini(prompt):
         response = model.generate_content(prompt)
         content = response.text.strip()
 
-        json_start = content.find('{')
-        if json_start != -1:
-            json_part = content[json_start:]
-            return json.loads(json_part)
-        else:
-            return {
-                "outdated": False,
-                "error": "Gemini response not in JSON format"
-            }
+        json_matches = re.findall(r'{[\s\S]*?}', content)
+        for match in json_matches:
+            try:
+                return json.loads(match)
+            except json.JSONDecodeError:
+                continue
+        return {
+            "outdated": False,
+            "error": "No valid JSON object found in Gemini response"
+        }
         
     except Exception as e:
         return json.dumps({
@@ -92,7 +93,7 @@ def process(sdata):
             context = retrieval(index, embeddings, texts, item["content"], top=3)
             prompt = gen_prompt(item["content"], item.get("links", []), context)
             sugesstion_json = query_gemini(prompt)
-            sugesstion = json.loads(sugesstion_json)
+            sugesstion = sugesstion_json
         except Exception as e:
             sugesstion = {
                 "outdated": False,
