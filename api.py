@@ -14,8 +14,6 @@ def scrape():
    url = request.args.get("url")
    if not url:
         return jsonify({"error": "URL parameter is required"}), 400
-
-
    result = scrape_website(url)
    try:
       data = json.loads(result)
