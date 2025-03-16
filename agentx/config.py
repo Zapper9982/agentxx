@@ -7,4 +7,4 @@ LIGHTHOUSE_API_URL = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed
 SEM_RUSH_API_KEY = ""
 
 # DeepSeek API key for metadata optimization
-DEEPSEEK_API_KEY = ""
+DEEPSEEK_API_KEY = "sk-118f1008a46e43b2bf571c8533c49a51"
