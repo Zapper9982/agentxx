@@ -1,5 +1,4 @@
 import requests
-# from agentx.config import LIGHTHOUSE_API_URL, SEM_RUSH_API_KEY, GEMINI_API_KEY
 import google.generativeai as genai
 import os
 from dotenv import load_dotenv
@@ -14,11 +13,24 @@ def analyze_seo(url: str) -> dict:
     response = os.getenv(f"https://www.googleapis.com/pagespeedonline/v5/runPagespeed?key={LIGHTHOUSE_API_URL}&url={url}")
     return response.json() if response.status_code == 200 else {"error": "Failed to retrieve SEO data"}
 
-def get_keyword_suggestions(url: str) -> dict:
-    """Fetch keyword suggestions from the Semrush API."""
-    semrush_url = f"https://api.semrush.com/?key={SEM_RUSH_API_KEY}&url={url}"
-    response = requests.get(semrush_url)
-    return response.json() if response.status_code == 200 else {"error": "Failed to retrieve keyword suggestions"}
+def get_keyword_suggestions(query: str) -> dict:
+    """
+    Fetch keyword suggestions using SerpApi's Google Autocomplete functionality.
+    
+    """
+    serp_api_key = os.getenv("SERP_API_KEY")
+    params = {
+        "engine": "google_autocomplete",
+        "q": query,
+        "api_key": serp_api_key,
+    }
+    response = requests.get("https://serpapi.com/search", params=params)
+    if response.status_code == 200:
+        data = response.json()
+        # SerpApi returns suggestions in the "suggestions" key
+        suggestions = data.get("suggestions", [])
+        return {"keywords": suggestions, "status": "success"}
+    return {"error": "Failed to retrieve keyword suggestions", "status": "failure"}
 
 def optimize_metadata(html: str) -> str:
     """Optimize HTML metadata using Gemini API."""
