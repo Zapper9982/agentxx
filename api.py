@@ -4,7 +4,7 @@ from agentx.scraper import scrape_website
 from agentx.rag_utils import vec_store, retrieval
 from agentx.content_update import process_update
 from agentx.content_addition import process_add
-from agentx.error_link import check_broken_links
+from agentx.error_link import process_links
 import json 
 
 app = Flask(__name__)
@@ -56,7 +56,7 @@ def add():
 
 @app.route('/errorlink', methods=["GET"])
 def errorlink():
-    url = request.args.get("url")
+    url = "https://en.wikipedia.org/wiki/Beheshtiabad"
     if not url:
         return jsonify({"error": "URL parameter is required"}), 400
 
@@ -69,7 +69,7 @@ def errorlink():
         except json.JSONDecodeError:
             return jsonify({"error": "Invalid JSON response from scraper"}), 500
         
-        broken_links = check_broken_links(scraped_data, base_url=url)
+        broken_links = process_links(scraped_data, base_url=url)
         return jsonify({"broken_links": broken_links})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
