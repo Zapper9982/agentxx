@@ -14,9 +14,10 @@ import {
 import { Code, Group } from '@mantine/core';
 import { MantineLogo } from '@mantinex/mantine-logo';
 import classes from './navbarminimal.module.css';
+import { ActionToggle } from '../darkmode/ActionToggle';
 
 const data = [
-  { link: '', label: 'Notifications', icon: IconBellRinging },
+  { link: '', label: 'Content Update', icon: IconBellRinging },
   { link: '', label: 'Billing', icon: IconReceipt2 },
   { link: '', label: 'Security', icon: IconFingerprint },
   { link: '', label: 'SSH Keys', icon: IconKey },
@@ -53,18 +54,11 @@ export function NavbarMinimal() {
         </Group>
         {links}
       </div>
+      <div> <ActionToggle/></div>
 
-      <div className={classes.footer}>
-        <a href="#" className={classes.link} onClick={(event) => event.preventDefault()}>
-          <IconSwitchHorizontal className={classes.linkIcon} stroke={1.5} />
-          <span>Change account</span>
-        </a>
-
-        <a href="#" className={classes.link} onClick={(event) => event.preventDefault()}>
-          <IconLogout className={classes.linkIcon} stroke={1.5} />
-          <span>Logout</span>
-        </a>
-      </div>
+        
+    
     </nav>
+
   );
 }
