@@ -36,7 +36,7 @@ export default function RootLayout({
         <MantineProvider>
           
           <NavbarMinimal />
-          <main style={{marginLeft :"80px"}}>
+          <main style={{marginLeft :"200px"}}>
          
             {children}
           </main>
