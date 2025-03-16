@@ -10,7 +10,10 @@ import time
 app = typer.Typer()
 
 @app.command()
-def optimize():
+def optimize(url: str = typer.Argument(..., help="The URL of the webpage to optimize")):
+    """
+    Optimize SEO for the provided webpage URL.
+    """
     typer.echo("Running SEO Optimization and Performance Monitoring...")
 
     url = "https://ayushhh.medium.com/summer-of-bitcoin23-my-experience-1357a0f16495"
@@ -28,6 +31,7 @@ def optimize():
     # typer.echo("Optimized Metadata:")
     # typer.echo(optimized_html)
     
+    # Monitor and log API performance
     performance_report = monitor_api()
     log_performance(performance_report)
     # typer.echo("Performance data logged.")
