@@ -5,12 +5,13 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Initialize Gemini API with your key
+# Initialize Gemini API
 genai.configure(api_key="GOOGLE_API_KEY")
+LIGHTHOUSE_API_URL = os.getenv("LIGHTHOUSE_API_URL")
 
 def analyze_seo(url: str) -> dict:
     """Analyze page performance and SEO metrics using Lighthouse API."""
-    response = os.getenv(f"https://www.googleapis.com/pagespeedonline/v5/runPagespeed?key={LIGHTHOUSE_API_URL}&url={url}")
+    response = requests.get(f"https://www.googleapis.com/pagespeedonline/v5/runPagespeed?key={LIGHTHOUSE_API_URL}&url={url}")
     return response.json() if response.status_code == 200 else {"error": "Failed to retrieve SEO data"}
 
 def get_keyword_suggestions(query: str) -> dict:
