@@ -1,28 +1,22 @@
 'use client'
 import { useState } from 'react';
 import {
-  Icon2fa,
-  IconBellRinging,
-  IconDatabaseImport,
-  IconFingerprint,
-  IconKey,
-  IconLogout,
-  IconReceipt2,
-  IconSettings,
-  IconSwitchHorizontal,
+  IconHome,
+  IconLayoutDashboard,
+  IconSeo,
+  IconEdit,
+  IconDatabasePlus,
 } from '@tabler/icons-react';
 import { Code, Group } from '@mantine/core';
 import classes from './navbarminimal.module.css';
 import { ActionToggle } from '../darkmode/ActionToggle';
 
 const data = [
-  { link: '', label: 'Content Update', icon: IconBellRinging },
-  { link: '', label: 'Billing', icon: IconReceipt2 },
-  { link: '', label: 'Security', icon: IconFingerprint },
-  { link: '', label: 'SSH Keys', icon: IconKey },
-  { link: '', label: 'Databases', icon: IconDatabaseImport },
-  { link: '', label: 'Authentication', icon: Icon2fa },
-  { link: '', label: 'Other Settings', icon: IconSettings },
+  { link: '', label: 'Home', icon: IconHome },
+  { link: '', label: 'Dashboard', icon: IconLayoutDashboard },
+  { link: '', label: 'SEO Optimization', icon: IconSeo },
+  { link: '', label: 'Content Update', icon: IconEdit },
+  { link: '', label: 'Content Add', icon: IconDatabasePlus },
 ];
 
 export function NavbarMinimal() {

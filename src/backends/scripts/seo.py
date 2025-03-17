@@ -5,7 +5,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Initialize Gemini API
 genai.configure(api_key="GOOGLE_API_KEY")
 LIGHTHOUSE_API_URL = os.getenv("LIGHTHOUSE_API_URL")
 
@@ -16,21 +15,36 @@ def analyze_seo(url: str) -> dict:
 
 def get_keyword_suggestions(query: str) -> dict:
     """
-    Fetch keyword suggestions using SerpApi's Google Autocomplete functionality.
-    
+    Fetch keyword suggestions using SerpApi.
+    Instead of using a dedicated "suggestions" key, this function extracts the
+    snippet_highlighted_words from the response, ensuring the returned words are unique.
     """
     serp_api_key = os.getenv("SERP_API_KEY")
     params = {
-        "engine": "google_autocomplete",
+        "engine": "google", 
         "q": query,
         "api_key": serp_api_key,
     }
     response = requests.get("https://serpapi.com/search", params=params)
     if response.status_code == 200:
         data = response.json()
-        # SerpApi returns suggestions in the "suggestions" key
-        suggestions = data.get("suggestions", [])
-        return {"keywords": suggestions, "status": "success"}
+        unique_words = set()
+
+        # Extract from organic_results if available
+        if "organic_results" in data:
+            for result in data["organic_results"]:
+                if "snippet_highlighted_words" in result:
+                    for word in result["snippet_highlighted_words"]:
+                        unique_words.add(word)
+
+        # Fallback: Extract from related_questions if no keywords were found
+        if not unique_words and "related_questions" in data:
+            for item in data["related_questions"]:
+                if "snippet_highlighted_words" in item:
+                    for word in item["snippet_highlighted_words"]:
+                        unique_words.add(word)
+
+        return {"keywords": list(unique_words), "status": "success"}
     return {"error": "Failed to retrieve keyword suggestions", "status": "failure"}
 
 def optimize_metadata(html: str) -> str:

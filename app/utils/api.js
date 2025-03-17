@@ -1,28 +1,31 @@
-export async function dumpLayout(name,toKill) {
-    const res = await fetch("http://localhost:6969/dumplayout/" + name + "/" + Date.now()+"/"+toKill);
-    const data = await res.text();
-    console.log(data);
-    return data;
+const API_BASE_URL = 'http://127.0.0.1:5000';
+
+export async function analyzeSEO(url) {
+  const res = await fetch(`${API_BASE_URL}/seo?url=${encodeURIComponent(url)}`);
+  const data = await res.json();
+  return data;
 }
 
-export async function restoreLayout(name) {
-    const res = await fetch("http://localhost:6969/restore/" + name.split(".")[0] );
-    const data = await res.text();
-    console.log(data);
-    return data;
+export async function scrapeWebsite(url) {
+  const res = await fetch(`${API_BASE_URL}/scrape?url=${encodeURIComponent(url)}`);
+  const data = await res.json();
+  return data;
 }
 
-export async function getLayouts() {
-    const res = await fetch("http://localhost:6969/getlayouts");
-    const data = await res.json();
-    console.log(data);
-    return data;
+export async function updateContent(url) {
+  const res = await fetch(`${API_BASE_URL}/update`);
+  const data = await res.json();
+  return data;
 }
 
-export async function getimg(name){
-    const res = await fetch("http://localhost:6969/screenshot/" + name);
-    const data = await res.text();
-    console.log(data);
-    return data;
+export async function addContent(url) {
+  const res = await fetch(`${API_BASE_URL}/add`);
+  const data = await res.json();
+  return data;
 }
-// dumpLayout("test");
+
+export async function getErrorLinks(url) {
+  const res = await fetch(`${API_BASE_URL}/errorlink`);
+  const data = await res.json();
+  return data;
+}

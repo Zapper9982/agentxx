@@ -8,7 +8,7 @@ export default function Home() {
      <>
      
       <HeroTitle/>
-      <h1> HHIIII</h1>
+      <h1> Test</h1>
       <h1> wasssup</h1>
    
 
