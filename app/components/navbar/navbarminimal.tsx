@@ -13,14 +13,14 @@ import { ActionToggle } from '../darkmode/ActionToggle';
 
 const data = [
   { link: '', label: 'Home', icon: IconHome },
-  { link: '', label: 'Dashboard', icon: IconLayoutDashboard },
-  { link: '', label: 'SEO Optimization', icon: IconSeo },
-  { link: '', label: 'Content Update', icon: IconEdit },
+  { link: '/dashboard', label: 'Dashboard', icon: IconLayoutDashboard },
+  { link: '/seo_', label: 'SEO Optimization', icon: IconSeo },
+  { link: '/updatecontent', label: 'Content Update', icon: IconEdit },
   { link: '', label: 'Content Add', icon: IconDatabasePlus },
 ];
 
 export function NavbarMinimal() {
-  const [active, setActive] = useState('Billing');
+  const [active, setActive] = useState('Home');
 
   const links = data.map((item) => (
     <a
@@ -29,7 +29,10 @@ export function NavbarMinimal() {
       href={item.link}
       key={item.label}
       onClick={(event) => {
-        event.preventDefault();
+        // Only prevent default if there is no valid link.
+        if (!item.link) {
+          event.preventDefault();
+        }
         setActive(item.label);
       }}
     >
@@ -46,8 +49,9 @@ export function NavbarMinimal() {
         </Group>
         {links}
       </div>
-      <div><ActionToggle/></div>
-      
+      <div>
+        <ActionToggle />
+      </div>
     </nav>
   );
 }

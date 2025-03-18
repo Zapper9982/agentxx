@@ -1,5 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { URLInputForm } from '../components/updatecontent/URLform'
+
+const [url,setUrl] = useState('');
+const [loading , setLoading] = useState(false);
 
 
 type Props = {}
@@ -7,6 +10,7 @@ type Props = {}
 const page = (props: Props) => {
   return (
     <URLInputForm/>
+
   )
 }
 
