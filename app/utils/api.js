@@ -19,7 +19,7 @@ export async function updateContent(url) {
 }
 
 export async function addContent(url) {
-  const res = await fetch(`${API_BASE_URL}/add`);
+  const res = await fetch(`${API_BASE_URL}/add?url=${encodeURIComponent(url)}`);
   const data = await res.json();
   return data;
 }
