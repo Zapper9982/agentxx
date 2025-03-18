@@ -37,7 +37,9 @@ def update():
 
 @app.route('/add', methods=["GET"])
 def add():
-    url = "https://api-docs.deepseek.com/"
+    url = request.args.get("url")
+    if not url:
+         return jsonify({"error": "URL parameter is required"}), 400
     try:
         scraped = scrape_website(url)
         if isinstance(scraped, str):
