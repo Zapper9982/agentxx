@@ -7,6 +7,8 @@ const [loading , setLoading] = useState(false);
 
 
 type Props = {}
+ 
+
 
 const page = (props: Props) => {
   return (
