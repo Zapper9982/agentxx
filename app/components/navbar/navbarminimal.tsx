@@ -16,7 +16,7 @@ const data = [
   { link: '/dashboard', label: 'Dashboard', icon: IconLayoutDashboard },
   { link: '/seo_', label: 'SEO Optimization', icon: IconSeo },
   { link: '/updatecontent', label: 'Content Update', icon: IconEdit },
-  { link: '', label: 'Content Add', icon: IconDatabasePlus },
+  { link: '/content_add', label: 'Content Add', icon: IconDatabasePlus },
 ];
 
 export function NavbarMinimal() {
