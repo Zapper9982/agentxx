@@ -51,14 +51,24 @@ export default function SEOPage() {
     setLoading(true);
     try {
       const data = await getErrorLinks(url);
+      console.log('API Response:', data);
+  
+      if (!Array.isArray(data)) {
+        console.error('Unexpected response format:', data);
+        setLinks([]);
+        return;
+      }
+  
       const validLinks = data.filter(item => Array.isArray(item.broken_links) && item.broken_links.length > 0);
       setLinks(validLinks);
     } catch (error) {
       console.error('Error fetching broken links:', error);
+      setLinks([]);
     } finally {
       setLoading(false);
     }
   };
+  
 
   return (
     <Container size="md" pt={40}>
