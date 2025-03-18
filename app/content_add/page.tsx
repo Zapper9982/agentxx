@@ -27,12 +27,7 @@ export default function SEOPage() {
     const data = await addContent(url);
     setContent(data);
     setLoading(false);
-    console.log(content);
   };
-
-  useEffect(() => {
-    console.log(content);
-  }, [content]);
 
   return (
     <Container

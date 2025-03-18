@@ -37,7 +37,6 @@ def update():
 
 @app.route('/add', methods=["GET"])
 def add():
-    print("I reached here")
     url = request.args.get("url")
     if not url:
          return jsonify({"error": "URL parameter is required"}), 400
