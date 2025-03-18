@@ -14,7 +14,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   // Adjust the width as needed for your navbar
-  const navbarWidth = "250px";
+  const navbarWidth = "220px";
 
   return (
     <html lang="en" {...mantineHtmlProps}>
@@ -25,7 +25,7 @@ export default function RootLayout({
         <MantineProvider>
           
           <NavbarMinimal />
-          <main style={{marginLeft :"200px"}}>
+          <main style={{marginLeft :"220px"}}>
          
             {children}
           </main>
