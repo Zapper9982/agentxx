@@ -1,38 +1,38 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { TextInput, Button, Container, Paper, Text, Stack, Card, Title } from '@mantine/core';
-import { IconSearch } from '@tabler/icons-react';
+import { Container, Paper, Text, Title } from '@mantine/core';
 import { updateContent } from '../utils/api';
+import { useAnalysis } from '../contexts/Analysiscontext';
 
 export default function UpdateContentPage() {
-  const [url, setUrl] = useState('');
-  const [outdated, setOutdated] = useState([]);
+  const { url } = useAnalysis();
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // Messages to display while loading
+  // Typewriter effect states and messages
   const messages = [
-    'OOur AI is thinking...',
-    'PPlease wait...',
-    'AAnalyzing your content...',
-    'CCrunching data...',
-    'AAlmost there...',
-    'PProcessing your request...',
-    'GGenerating insights...',
-    'SScanning for patterns...',
-    'RRefining the output...',
-    'LLoading smart responses...',
-    'EExamining possibilities...',
-    'CCalculating probabilities...',
-    'FFormulating a response...',
-    'DDigging into data...',
-    'VValidating information...',
-    'SSearching for accuracy...',
-    'CCompiling relevant details...',
-    'AAssessing the best outcome...',
-    'IInterpreting your input...',
-    'MMaking sense of the data...',
-    'UUnderstanding the context...'
+    'Our AI is thinking...',
+    'Please wait...',
+    'Analyzing your content...',
+    'Crunching data...',
+    'Almost there...',
+    'Processing your request...',
+    'Generating insights...',
+    'Scanning for patterns...',
+    'Refining the output...',
+    'Loading smart responses...',
+    'Examining possibilities...',
+    'Calculating probabilities...',
+    'Formulating a response...',
+    'Digging into data...',
+    'Validating information...',
+    'Searching for accuracy...',
+    'Compiling relevant details...',
+    'Assessing the best outcome...',
+    'Interpreting your input...',
+    'Making sense of the data...',
+    'Understanding the context...'
   ];
   const [messageIndex, setMessageIndex] = useState(0);
   const [typedText, setTypedText] = useState('');
@@ -42,7 +42,7 @@ export default function UpdateContentPage() {
     let cycleInterval;
     if (loading) {
       cycleInterval = setInterval(() => {
-        setMessageIndex(prev => (prev + 1) % messages.length);
+        setMessageIndex((prev) => (prev + 1) % messages.length);
       }, 5000);
     } else {
       setMessageIndex(0);
@@ -59,7 +59,7 @@ export default function UpdateContentPage() {
       setTypedText(''); // Reset the displayed text
       let charIndex = 0;
       const typingInterval = setInterval(() => {
-        setTypedText(prev => prev + fullMessage.charAt(charIndex));
+        setTypedText((prev) => prev + fullMessage.charAt(charIndex));
         charIndex++;
         if (charIndex === fullMessage.length) {
           clearInterval(typingInterval);
@@ -69,25 +69,34 @@ export default function UpdateContentPage() {
     }
   }, [messageIndex, loading]);
 
-  const handleUpdateContent = async () => {
-    if (!url) return;
-    setLoading(true);
-    try {
-      const data = await updateContent(url);
-      console.log('Fetched data:', data);
-      if (!Array.isArray(data)) {
-        console.error('Data is not an array:', data);
-      }
-      const filtered = Array.isArray(data)
-        ? data.filter(item => item.analysis?.outdated === true)
-        : [];
-      setOutdated(filtered);
-    } catch (er) {
-      console.error("Error fetching updated data", er);
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    if (url) {
+      setLoading(true);
+      updateContent(url)
+        .then((res) => {
+          console.log('Fetched update content:', res);
+          // Expecting res to be an array of update objects
+          setData(Array.isArray(res) ? res : []);
+        })
+        .catch((error) => console.error("Error fetching update data:", error))
+        .finally(() => setLoading(false));
     }
-  };
+  }, [url]);
+
+  if (!url) {
+    return (
+      <Container size="md" pt={40}>
+        <Title order={2} align="center">
+          Please run analysis first from the Dashboard.
+        </Title>
+      </Container>
+    );
+  }
+
+  // Filter to only those update objects where analysis.outdated is true
+  const outdatedReports = data.filter(
+    (report) => report.analysis && report.analysis.outdated
+  );
 
   return (
     <Container size="md" pt={40}>
@@ -96,112 +105,115 @@ export default function UpdateContentPage() {
         align="center"
         style={{ fontSize: '4rem', fontWeight: 700 }}
       >
-        <span style={{ color: "lightskyblue" }}>Content Update</span> Suggestor
+        <span style={{ color: 'lightskyblue' }}>Content Update</span> Suggestor
       </Title>
-      <Text align="center" color="dimmed" mt={10}>
-        Enter a website URL to analyze outdated content and get suggestions.
-      </Text>
-      
-      <Card
-        shadow="xl"
-        padding="xl"
-        withBorder
-        style={{
-          width: '100%',
-          maxWidth: 600,
-          borderRadius: 12,
-          margin: '40px auto'
-        }}
-      >
-        <Stack gap={24}>
-          <TextInput
-            placeholder="Enter website URL"
-            rightSection={<IconSearch size={16} />}
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-            radius="md"
-            size="md"
-          />
-          <Button onClick={handleUpdateContent} fullWidth radius="md">
-            Check for Updates
-          </Button>
-        </Stack>
-      </Card>
-      
-      {(loading || outdated.length > 0) && (
+      {loading && (
         <Paper
           p="xl"
           shadow="lg"
           withBorder
           mt={40}
           style={{
-            backgroundColor: "#1e1e1e",
-            color: "#d4d4d4",
-            fontFamily: "monospace",
-            borderRadius: "8px",
-            width: "100%",
-            padding: "20px",
-            minHeight: "200px"
+            backgroundColor: '#1e1e1e',
+            color: '#d4d4d4',
+            fontFamily: 'monospace',
+            borderRadius: '8px',
+            width: '100%',
+            padding: '20px',
+            minHeight: '200px'
           }}
         >
           {/* Terminal header mimicking typical terminal window buttons */}
-          <div style={{
-            padding: "10px 20px",
-            borderBottom: "1px solid #333",
-            display: "flex",
-            gap: "8px",
-            alignItems: "center"
-          }}>
-            <div style={{ width: "12px", height: "12px", borderRadius: "50%", backgroundColor: "#ff5f56" }}></div>
-            <div style={{ width: "12px", height: "12px", borderRadius: "50%", backgroundColor: "#ffbd2e" }}></div>
-            <div style={{ width: "12px", height: "12px", borderRadius: "50%", backgroundColor: "#27c93f" }}></div>
+          <div
+            style={{
+              padding: '10px 20px',
+              borderBottom: '1px solid #333',
+              display: 'flex',
+              gap: '8px',
+              alignItems: 'center'
+            }}
+          >
+            <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#ff5f56' }}></div>
+            <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#ffbd2e' }}></div>
+            <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#27c93f' }}></div>
             <Text ml="auto" style={{ fontSize: '0.8rem' }}>Terminal</Text>
           </div>
-          <div style={{ padding: "20px" }}>
-            {loading ? (
-              <div style={{ whiteSpace: "pre-wrap" }}>{typedText}</div>
-            ) : (
-              outdated.map((report, index) => (
-                <div key={report.id} style={{ marginBottom: '1em' }}>
-                  <div style={{ color: '#d4d4d4' }}>Report {index + 1}</div>
-                  <div style={{ color: '#888' }}>────────────────────────────</div>
-                  <div>
-                    <span style={{ color: '#d4d4d4' }}>ID: </span>
-                    <span style={{ color: '#f8f8f2' }}>{report.id}</span>
-                  </div>
-                  <div>
-                    <span style={{ color: '#ff79c6' }}>Reason: </span>
-                    <span style={{ color: '#8be9fd' }}>{report.analysis?.reason}</span>
-                  </div>
-                  {report.analysis?.suggestion && (
-                    <div>
-                      <span style={{ color: '#50fa7b' }}>Suggestion: </span>
-                      <span style={{ color: '#f1fa8c' }}>{report.analysis.suggestion}</span>
-                    </div>
-                  )}
-                  <div style={{
-                    fontSize: '0.8em',
-                    marginLeft: '20px',
-                    marginTop: '4px'
-                  }}>
-                    <details style={{ cursor: 'pointer' }}>
-                      <summary style={{ color: '#bd93f9' }}>Original Content</summary>
-                      <div style={{ color: '#6272a4', marginTop: '4px' }}>
-                        {report.orignal_content}
-                      </div>
-                    </details>
-                  </div>
-                  <div style={{ color: '#888', marginTop: '8px' }}>
-                    {'─'.repeat(50)}
-                  </div>
-                </div>
-              ))
-            )}
+          <div style={{ padding: '20px', whiteSpace: 'pre-wrap' }}>
+            {typedText}
           </div>
         </Paper>
       )}
-      
-      {!loading && outdated.length === 0 && (
+      {!loading && outdatedReports.length > 0 && (
+        <Paper
+          p="xl"
+          shadow="lg"
+          withBorder
+          mt={40}
+          style={{
+            backgroundColor: '#1e1e1e',
+            color: '#d4d4d4',
+            fontFamily: 'monospace',
+            borderRadius: '8px',
+            width: '100%',
+            padding: '20px',
+            minHeight: '200px'
+          }}
+        >
+          {/* Terminal header mimicking typical terminal window buttons */}
+          <div
+            style={{
+              padding: '10px 20px',
+              borderBottom: '1px solid #333',
+              display: 'flex',
+              gap: '8px',
+              alignItems: 'center'
+            }}
+          >
+            <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#ff5f56' }}></div>
+            <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#ffbd2e' }}></div>
+            <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#27c93f' }}></div>
+            <Text ml="auto" style={{ fontSize: '0.8rem' }}>Terminal</Text>
+          </div>
+          <div style={{ padding: '20px', whiteSpace: 'pre-wrap' }}>
+            {outdatedReports.map((report, index) => (
+              <div key={report.id || index} style={{ marginBottom: '1em' }}>
+                <div style={{ color: '#d4d4d4' }}>
+                  Report {index + 1}
+                </div>
+                <div style={{ color: '#888' }}>
+                  ─────────────────────────────
+                </div>
+                <div>
+                  <span style={{ color: '#d4d4d4' }}>ID: </span>
+                  <span style={{ color: '#f8f8f2' }}>{report.id}</span>
+                </div>
+                <div>
+                  <span style={{ color: '#ff79c6' }}>Reason: </span>
+                  <span style={{ color: '#8be9fd' }}>{report.analysis.reason}</span>
+                </div>
+                {report.analysis.suggestion && (
+                  <div>
+                    <span style={{ color: '#50fa7b' }}>Suggestion: </span>
+                    <span style={{ color: '#f1fa8c' }}>{report.analysis.suggestion}</span>
+                  </div>
+                )}
+                <div style={{ fontSize: '0.8em', marginLeft: '20px', marginTop: '4px' }}>
+                  <details style={{ cursor: 'pointer' }}>
+                    <summary style={{ color: '#bd93f9' }}>Original Content</summary>
+                    <div style={{ color: '#6272a4', marginTop: '4px' }}>
+                      {report.orignal_content}
+                    </div>
+                  </details>
+                </div>
+                <div style={{ color: '#888', marginTop: '8px' }}>
+                  {'─'.repeat(50)}
+                </div>
+              </div>
+            ))}
+          </div>
+        </Paper>
+      )}
+      {!loading && outdatedReports.length === 0 && (
         <Text align="center" color="gray" mt={20}>
           {url ? 'No outdated content found.' : 'Please enter a URL to start.'}
         </Text>

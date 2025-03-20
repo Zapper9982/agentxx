@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
   IconHome,
@@ -18,21 +19,23 @@ const data = [
   { link: '/seo_', label: 'SEO Optimization', icon: IconSeo },
   { link: '/updatecontent', label: 'Content Update', icon: IconEdit },
   { link: '/content_add', label: 'Content Add', icon: IconDatabasePlus },
+  { link: '/broken_links', label: 'Content Add', icon: IconDatabasePlus },
 ];
 
 export function NavbarMinimal() {
   // Get current pathname from Next.js router
   const pathname = usePathname();
 
+  // Use <Link> instead of <a> to enable client-side navigation
   const links = data.map((item) => (
-    <a
+    <Link
       key={item.label}
       href={item.link}
       className={`${classes.link} ${pathname === item.link ? classes.active : ''}`}
     >
       <item.icon className={classes.linkIcon} stroke={1.5} />
       <span>{item.label}</span>
-    </a>
+    </Link>
   ));
 
   return (
@@ -49,4 +52,3 @@ export function NavbarMinimal() {
     </nav>
   );
 }
-
