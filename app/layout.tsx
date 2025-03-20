@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import "@mantine/core/styles.css";
+import { AnalysisProvider } from './contexts/Analysiscontext';
 
 import { ColorSchemeScript, MantineProvider, mantineHtmlProps } from "@mantine/core";
 import { NavbarMinimal } from "./components/navbar/navbarminimal";
@@ -17,20 +18,25 @@ export default function RootLayout({
   const navbarWidth = "220px";
 
   return (
+   
     <html lang="en" {...mantineHtmlProps}>
       <head>
         <ColorSchemeScript />
       </head>
       <body>
+      <AnalysisProvider>
         <MantineProvider>
-          
+         
           <NavbarMinimal />
           <main style={{marginLeft :"220px"}}>
          
             {children}
           </main>
+         
         </MantineProvider>
+        </AnalysisProvider>
       </body>
     </html>
+   
   );
 }
