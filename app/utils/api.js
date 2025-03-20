@@ -13,7 +13,7 @@ export async function scrapeWebsite(url) {
 }
 
 export async function updateContent(url) {
-  const res = await fetch(`${API_BASE_URL}/update`);
+  const res = await fetch(`${API_BASE_URL}/update?url=${encodeURIComponent(url)}`);
   const data = await res.json();
   return data;
 }
@@ -25,7 +25,7 @@ export async function addContent(url) {
 }
 
 export async function getErrorLinks(url) {
-  const res = await fetch(`${API_BASE_URL}/errorlink`);
+  const res = await fetch(`${API_BASE_URL}/errorlink?url=${encodeURIComponent(url)}`);
   const data = await res.json();
   return data;
 }

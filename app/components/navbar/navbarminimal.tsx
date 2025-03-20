@@ -1,5 +1,6 @@
-'use client'
-import { useState } from 'react';
+'use client';
+
+import { usePathname } from 'next/navigation';
 import {
   IconHome,
   IconLayoutDashboard,
@@ -12,26 +13,22 @@ import classes from './navbarminimal.module.css';
 import { ActionToggle } from '../darkmode/ActionToggle';
 
 const data = [
-  { link: '', label: 'Home', icon: IconHome },
-  { link: '', label: 'Dashboard', icon: IconLayoutDashboard },
-  { link: '', label: 'SEO Optimization', icon: IconSeo },
-  { link: '', label: 'Content Update', icon: IconEdit },
-  { link: '', label: 'Content Add', icon: IconDatabasePlus },
+  { link: '/', label: 'Home', icon: IconHome },
+  { link: '/dashboard', label: 'Dashboard', icon: IconLayoutDashboard },
+  { link: '/seo_', label: 'SEO Optimization', icon: IconSeo },
+  { link: '/updatecontent', label: 'Content Update', icon: IconEdit },
+  { link: '/content_add', label: 'Content Add', icon: IconDatabasePlus },
 ];
 
 export function NavbarMinimal() {
-  const [active, setActive] = useState('Billing');
+  // Get current pathname from Next.js router
+  const pathname = usePathname();
 
   const links = data.map((item) => (
     <a
-      className={classes.link}
-      data-active={item.label === active || undefined}
-      href={item.link}
       key={item.label}
-      onClick={(event) => {
-        event.preventDefault();
-        setActive(item.label);
-      }}
+      href={item.link}
+      className={`${classes.link} ${pathname === item.link ? classes.active : ''}`}
     >
       <item.icon className={classes.linkIcon} stroke={1.5} />
       <span>{item.label}</span>
@@ -46,8 +43,10 @@ export function NavbarMinimal() {
         </Group>
         {links}
       </div>
-      <div><ActionToggle/></div>
-      
+      <div>
+        <ActionToggle />
+      </div>
     </nav>
   );
 }
+

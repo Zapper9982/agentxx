@@ -3,11 +3,11 @@
 import { useState, useEffect } from 'react';
 import { TextInput, Button, Container, Paper, Text, Stack, Card, Title } from '@mantine/core';
 import { IconSearch } from '@tabler/icons-react';
-import { addContent } from '../utils/api';
+import { updateContent } from '../utils/api';
 
 export default function UpdateContentPage() {
   const [url, setUrl] = useState('');
-  const [content, setContent] = useState([]);
+  const [outdated, setOutdated] = useState([]);
   const [loading, setLoading] = useState(false);
 
   // Messages to display while loading
@@ -37,6 +37,7 @@ export default function UpdateContentPage() {
   const [messageIndex, setMessageIndex] = useState(0);
   const [typedText, setTypedText] = useState('');
 
+  // Cycle through messages every 5 seconds while loading
   useEffect(() => {
     let cycleInterval;
     if (loading) {
@@ -51,11 +52,11 @@ export default function UpdateContentPage() {
     };
   }, [loading]);
 
-  // Type out the message character-by-character when loading
+  // Typewriter effect for the current message
   useEffect(() => {
     if (loading) {
       const fullMessage = messages[messageIndex];
-      setTypedText('');
+      setTypedText(''); // Reset the displayed text
       let charIndex = 0;
       const typingInterval = setInterval(() => {
         setTypedText(prev => prev + fullMessage.charAt(charIndex));
@@ -68,20 +69,19 @@ export default function UpdateContentPage() {
     }
   }, [messageIndex, loading]);
 
-  const handleAddContent = async () => {
+  const handleUpdateContent = async () => {
     if (!url) return;
     setLoading(true);
     try {
-      const data = await addContent(url);
+      const data = await updateContent(url);
       console.log('Fetched data:', data);
       if (!Array.isArray(data)) {
         console.error('Data is not an array:', data);
       }
-      
       const filtered = Array.isArray(data)
-        ? data.filter(item => item.analysis)
+        ? data.filter(item => item.analysis?.outdated === true)
         : [];
-      setContent(filtered);
+      setOutdated(filtered);
     } catch (er) {
       console.error("Error fetching updated data", er);
     } finally {
@@ -96,10 +96,10 @@ export default function UpdateContentPage() {
         align="center"
         style={{ fontSize: '4rem', fontWeight: 700 }}
       >
-        <span style={{ color: "lightskyblue" }}>New Content</span> Suggestor
+        <span style={{ color: "lightskyblue" }}>Content Update</span> Suggestor
       </Title>
       <Text align="center" color="dimmed" mt={10}>
-        Enter a website URL to analyze content and get suggestions.
+        Enter a website URL to analyze outdated content and get suggestions.
       </Text>
       
       <Card
@@ -122,13 +122,13 @@ export default function UpdateContentPage() {
             radius="md"
             size="md"
           />
-          <Button onClick={handleAddContent} fullWidth radius="md">
+          <Button onClick={handleUpdateContent} fullWidth radius="md">
             Check for Updates
           </Button>
         </Stack>
       </Card>
       
-      {(loading || content.length > 0) && (
+      {(loading || outdated.length > 0) && (
         <Paper
           p="xl"
           shadow="lg"
@@ -161,7 +161,7 @@ export default function UpdateContentPage() {
             {loading ? (
               <div style={{ whiteSpace: "pre-wrap" }}>{typedText}</div>
             ) : (
-              content.map((report, index) => (
+              outdated.map((report, index) => (
                 <div key={report.id} style={{ marginBottom: '1em' }}>
                   <div style={{ color: '#d4d4d4' }}>Report {index + 1}</div>
                   <div style={{ color: '#888' }}>────────────────────────────</div>
@@ -173,10 +173,10 @@ export default function UpdateContentPage() {
                     <span style={{ color: '#ff79c6' }}>Reason: </span>
                     <span style={{ color: '#8be9fd' }}>{report.analysis?.reason}</span>
                   </div>
-                  {report.analysis?.addition && (
+                  {report.analysis?.suggestion && (
                     <div>
-                      <span style={{ color: '#50fa7b' }}>Addition: </span>
-                      <span style={{ color: '#f1fa8c' }}>{report.analysis.addition}</span>
+                      <span style={{ color: '#50fa7b' }}>Suggestion: </span>
+                      <span style={{ color: '#f1fa8c' }}>{report.analysis.suggestion}</span>
                     </div>
                   )}
                   <div style={{
@@ -191,28 +191,6 @@ export default function UpdateContentPage() {
                       </div>
                     </details>
                   </div>
-                  {/* Collapsible links section */}
-                  {report.links && report.links.length > 0 && (
-                    <div style={{ marginTop: '8px' }}>
-                      <details style={{ cursor: 'pointer' }}>
-                        <summary style={{ color: '#bd93f9' }}>Links</summary>
-                        <ul style={{ listStyle: 'none', paddingLeft: '20px', marginTop: '4px' }}>
-                          {report.links.map((link, i) => (
-                            <li key={i}>
-                              <a
-                                href={link.href}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                style={{ color: '#8be9fd', textDecoration: 'underline' }}
-                              >
-                                {link.content || link.href}
-                              </a>
-                            </li>
-                          ))}
-                        </ul>
-                      </details>
-                    </div>
-                  )}
                   <div style={{ color: '#888', marginTop: '8px' }}>
                     {'─'.repeat(50)}
                   </div>
@@ -223,9 +201,9 @@ export default function UpdateContentPage() {
         </Paper>
       )}
       
-      {!loading && content.length === 0 && (
+      {!loading && outdated.length === 0 && (
         <Text align="center" color="gray" mt={20}>
-          {url ? 'No content found.' : 'Please enter a URL to start.'}
+          {url ? 'No outdated content found.' : 'Please enter a URL to start.'}
         </Text>
       )}
     </Container>
