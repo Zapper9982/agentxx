@@ -8,8 +8,14 @@ from scripts.content_addition import process_add
 from scripts.error_link import process_links
 import json
 
+
+
+
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}) 
+
+
+
 
 @app.route('/scrape', methods=["GET"])
 def scrape():
