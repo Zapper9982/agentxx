@@ -19,6 +19,7 @@ CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
 @app.route('/scrape', methods=["GET"])
 def scrape():
+    print("hello world")
     url = request.args.get("url")
     if not url:
         return jsonify({"error": "URL parameter is required"}), 400
@@ -31,6 +32,7 @@ def scrape():
      
 @app.route('/update', methods=["GET"])
 def update():
+    print("hello world")
     url = request.args.get("url")
     if not url: 
         return jsonify({"error" : "URL parameters is required"}),400
@@ -45,6 +47,7 @@ def update():
 
 @app.route('/add', methods=["GET"])
 def add():
+    print("hello world")
     url = request.args.get("url")
     if not url:
          return jsonify({"error": "URL parameter is required"}), 400
@@ -59,6 +62,7 @@ def add():
 
 @app.route('/errorlink', methods=["GET"])
 def errorlink():
+    print("hello world")
     url = request.args.get("url")
     if not url:
          return jsonify({"error": "URL parameter is required"}), 400
@@ -76,6 +80,7 @@ def errorlink():
 
 @app.route('/seo', methods=["GET"])
 def seo():
+    print("hello world")
     url = request.args.get("url")
     if not url:
          return jsonify({"error": "URL parameter is required"}), 400
