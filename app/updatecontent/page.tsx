@@ -6,7 +6,7 @@ import { updateContent } from '../utils/api';
 import { useAnalysis } from '../contexts/Analysiscontext';
 
 export default function UpdateContentPage() {
-  const { url } = useAnalysis();
+  const { url, analysisData } = useAnalysis();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -70,18 +70,14 @@ export default function UpdateContentPage() {
   }, [messageIndex, loading]);
 
   useEffect(() => {
-    if (url) {
+    if (url && analysisData?.update) {
       setLoading(true);
-      updateContent(url)
-        .then((res) => {
-          console.log('Fetched update content:', res);
-          // Expecting res to be an array of update objects
-          setData(Array.isArray(res) ? res : []);
-        })
-        .catch((error) => console.error("Error fetching update data:", error))
-        .finally(() => setLoading(false));
+      const filteredData = Array.isArray(analysisData.update) ? analysisData.update : [];
+      setData(filteredData);
+      setLoading(false);
     }
-  }, [url]);
+  }, [url, analysisData.update]);
+  
 
   if (!url) {
     return (

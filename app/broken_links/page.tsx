@@ -1,27 +1,27 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { Container, Paper, Text, Title } from '@mantine/core';
-import { getErrorLinks } from '../utils/api';
-import { useAnalysis } from '../contexts/Analysiscontext';
+import { useState, useEffect } from "react";
+import { Container, Paper, Text, Title } from "@mantine/core";
+import { getErrorLinks } from "../utils/api";
+import { useAnalysis } from "../contexts/Analysiscontext";
 
 export default function BrokenLinksPage() {
-  const { url } = useAnalysis();
+  const { url, analysisData } = useAnalysis();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
 
   // Typewriter effect states and messages
   const messages = [
-    'Scanning for broken links...',
-    'Checking link integrity...',
-    'Analyzing webpage structure...',
-    'Validating hyperlinks...',
-    'Detecting inaccessible URLs...',
-    'Identifying dead links...',
-    'Processing your request...'
+    "Scanning for broken links...",
+    "Checking link integrity...",
+    "Analyzing webpage structure...",
+    "Validating hyperlinks...",
+    "Detecting inaccessible URLs...",
+    "Identifying dead links...",
+    "Processing your request...",
   ];
   const [messageIndex, setMessageIndex] = useState(0);
-  const [typedText, setTypedText] = useState('');
+  const [typedText, setTypedText] = useState("");
 
   useEffect(() => {
     let cycleInterval;
@@ -38,7 +38,7 @@ export default function BrokenLinksPage() {
   useEffect(() => {
     if (loading) {
       const fullMessage = messages[messageIndex];
-      setTypedText('');
+      setTypedText("");
       let charIndex = 0;
       const typingInterval = setInterval(() => {
         setTypedText((prev) => prev + fullMessage.charAt(charIndex));
@@ -50,17 +50,15 @@ export default function BrokenLinksPage() {
   }, [messageIndex, loading]);
 
   useEffect(() => {
-    if (url) {
+    if (url && analysisData?.errorLinks) {
       setLoading(true);
-      getErrorLinks(url)
-        .then((res) => {
-          console.log('Fetched broken links:', res);
-          setData(Array.isArray(res) ? res : []);
-        })
-        .catch((error) => console.error('Error fetching broken links:', error))
-        .finally(() => setLoading(false));
+      console.log("Fetched broken links:", analysisData.errorLinks);
+      setData(
+        Array.isArray(analysisData.errorLinks) ? analysisData.errorLinks : []
+      );
+      setLoading(false);
     }
-  }, [url]);
+  }, [url, analysisData?.errorLinks]);
 
   if (!url) {
     return (
@@ -72,12 +70,16 @@ export default function BrokenLinksPage() {
     );
   }
 
-  const brokenLinks = data.filter((link) => link.status === 'broken');
+  const brokenLinks = data.filter((link) => link.status === "broken");
 
   return (
     <Container size="md" pt={40}>
-      <Title order={1} align="center" style={{ fontSize: '4rem', fontWeight: 700 }}>
-        <span style={{ color: 'lightskyblue' }}>Broken Links</span> Detector
+      <Title
+        order={1}
+        align="center"
+        style={{ fontSize: "4rem", fontWeight: 700 }}
+      >
+        <span style={{ color: "lightskyblue" }}>Broken Links</span> Detector
       </Title>
       {loading && (
         <Paper
@@ -86,29 +88,54 @@ export default function BrokenLinksPage() {
           withBorder
           mt={40}
           style={{
-            backgroundColor: '#1e1e1e',
-            color: '#d4d4d4',
-            fontFamily: 'monospace',
-            borderRadius: '8px',
-            padding: '20px',
-            minHeight: '200px'
+            backgroundColor: "#1e1e1e",
+            color: "#d4d4d4",
+            fontFamily: "monospace",
+            borderRadius: "8px",
+            padding: "20px",
+            minHeight: "200px",
           }}
         >
           <div
             style={{
-              padding: '10px 20px',
-              borderBottom: '1px solid #333',
-              display: 'flex',
-              gap: '8px',
-              alignItems: 'center'
+              padding: "10px 20px",
+              borderBottom: "1px solid #333",
+              display: "flex",
+              gap: "8px",
+              alignItems: "center",
             }}
           >
-            <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#ff5f56' }}></div>
-            <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#ffbd2e' }}></div>
-            <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#27c93f' }}></div>
-            <Text ml="auto" style={{ fontSize: '0.8rem' }}>Terminal</Text>
+            <div
+              style={{
+                width: "12px",
+                height: "12px",
+                borderRadius: "50%",
+                backgroundColor: "#ff5f56",
+              }}
+            ></div>
+            <div
+              style={{
+                width: "12px",
+                height: "12px",
+                borderRadius: "50%",
+                backgroundColor: "#ffbd2e",
+              }}
+            ></div>
+            <div
+              style={{
+                width: "12px",
+                height: "12px",
+                borderRadius: "50%",
+                backgroundColor: "#27c93f",
+              }}
+            ></div>
+            <Text ml="auto" style={{ fontSize: "0.8rem" }}>
+              Terminal
+            </Text>
           </div>
-          <div style={{ padding: '20px', whiteSpace: 'pre-wrap' }}>{typedText}</div>
+          <div style={{ padding: "20px", whiteSpace: "pre-wrap" }}>
+            {typedText}
+          </div>
         </Paper>
       )}
       {!loading && brokenLinks.length > 0 && (
@@ -118,25 +145,25 @@ export default function BrokenLinksPage() {
           withBorder
           mt={40}
           style={{
-            backgroundColor: '#1e1e1e',
-            color: '#d4d4d4',
-            fontFamily: 'monospace',
-            borderRadius: '8px',
-            padding: '20px',
-            minHeight: '200px'
+            backgroundColor: "#1e1e1e",
+            color: "#d4d4d4",
+            fontFamily: "monospace",
+            borderRadius: "8px",
+            padding: "20px",
+            minHeight: "200px",
           }}
         >
           {brokenLinks.map((link, index) => (
-            <div key={index} style={{ marginBottom: '1em' }}>
-              <div style={{ color: '#d4d4d4' }}>Link {index + 1}</div>
-              <div style={{ color: '#888' }}>─────────────────────────────</div>
+            <div key={index} style={{ marginBottom: "1em" }}>
+              <div style={{ color: "#d4d4d4" }}>Link {index + 1}</div>
+              <div style={{ color: "#888" }}>─────────────────────────────</div>
               <div>
-                <span style={{ color: '#ff79c6' }}>URL: </span>
-                <span style={{ color: '#8be9fd' }}>{link.url}</span>
+                <span style={{ color: "#ff79c6" }}>URL: </span>
+                <span style={{ color: "#8be9fd" }}>{link.url}</span>
               </div>
               <div>
-                <span style={{ color: '#50fa7b' }}>Status: </span>
-                <span style={{ color: '#f1fa8c' }}>{link.status}</span>
+                <span style={{ color: "#50fa7b" }}>Status: </span>
+                <span style={{ color: "#f1fa8c" }}>{link.status}</span>
               </div>
             </div>
           ))}
