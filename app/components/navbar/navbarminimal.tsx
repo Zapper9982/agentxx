@@ -19,7 +19,7 @@ const data = [
   { link: '/seo_', label: 'SEO Optimization', icon: IconSeo },
   { link: '/updatecontent', label: 'Content Update', icon: IconEdit },
   { link: '/content_add', label: 'Content Add', icon: IconDatabasePlus },
-  { link: '/broken_links', label: 'Content Add', icon: IconDatabasePlus },
+  { link: '/broken_links', label: 'Broken Link Provider', icon: IconDatabasePlus },
 ];
 
 export function NavbarMinimal() {

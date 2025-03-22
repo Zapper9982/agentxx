@@ -12,8 +12,8 @@ export default function UpdateContentPage() {
 
   // Typewriter effect states and messages
   const messages = [
-    'Our AI is thinking...',
-    'Please wait...',
+    'OOur AI is thinking...',
+    'PPlease wait...',
     'Analyzing your content...',
     'Crunching data...',
     'Almost there...',

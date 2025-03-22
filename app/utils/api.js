@@ -29,3 +29,13 @@ export async function getErrorLinks(url) {
   const data = await res.json();
   return data;
 }
+
+export async function setupAider(workingDir) {
+  const res = await fetch(`${API_BASE_URL}/setup-aider`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ workingDir })
+  });
+  const data = await res.json();
+  return data;
+}

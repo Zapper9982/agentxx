@@ -4,37 +4,39 @@ import { Container, Card, TextInput, Button, Stack, Title, Text, Paper } from '@
 import { IconSearch } from '@tabler/icons-react';
 import { useAnalysis } from '../contexts/Analysiscontext';
 import { useRouter } from 'next/navigation';
-import { updateContent, addContent, getErrorLinks, analyzeSEO } from '../utils/api';
+import { updateContent, addContent, getErrorLinks, analyzeSEO, setupAider } from '../utils/api';
 
 export default function Dashboard() {
   const [urlInput, setUrlInput] = useState('');
+  const [workingDir, setWorkingDir] = useState(''); // state for working directory
   const [loading, setLoading] = useState(false);
+  const [setupResult, setSetupResult] = useState(null);
   const { setUrl, setAnalysisData } = useAnalysis();
   const router = useRouter();
 
   // Typewriter effect states and messages (unchanged)
   const messages = [
-    'Our AI is thinking...',
-    'Please wait...',
-    'Analyzing your content...',
-    'Crunching data...',
-    'Almost there...',
-    'Processing your request...',
-    'Generating insights...',
-    'Scanning for patterns...',
-    'Refining the output...',
-    'Loading smart responses...',
-    'Examining possibilities...',
-    'Calculating probabilities...',
-    'Formulating a response...',
-    'Digging into data...',
-    'Validating information...',
-    'Searching for accuracy...',
-    'Compiling relevant details...',
-    'Assessing the best outcome...',
-    'Interpreting your input...',
-    'Making sense of the data...',
-    'Understanding the context...'
+    'OOur AI is thinking...',
+    'PPlease wait...',
+    'AAnalyzing your content...',
+    'CCrunching data...',
+    'AAlmost there...',
+    'PProcessing your request...',
+    'GGenerating insights...',
+    'SScanning for patterns...',
+    'RRefining the output...',
+    'LLoading smart responses...',
+    'EExamining possibilities...',
+    'CCalculating probabilities...',
+    'FFormulating a response...',
+    'DDigging into data...',
+    'VValidating information...',
+    'SSearching for accuracy...',
+    'CCompiling relevant details...',
+    'AAssessing the best outcome...',
+    'IInterpreting your input...',
+    'MMaking sense of the data...',
+    'UUnderstanding the context...'
   ];
   const [messageIndex, setMessageIndex] = useState(0);
   const [typedText, setTypedText] = useState('');
@@ -70,13 +72,18 @@ export default function Dashboard() {
   }, [messageIndex, loading]);
 
   const handleSubmit = async () => {
-    if (!urlInput) return;
+    if (!urlInput || !workingDir) return; // Ensure both inputs are provided
     setLoading(true);
     const trimmedUrl = urlInput.trim();
     // Save URL in context
     setUrl(trimmedUrl);
     try {
-      // Call all API endpoints concurrently
+      // Call the setupAider endpoint with the working directory
+      const aiderRes = await setupAider(workingDir);
+      console.log('Aider setup response:', aiderRes);
+      setSetupResult(aiderRes.stdout || aiderRes.error);
+
+      // Optionally, continue with other API calls concurrently
       const [updateRes, addRes, errorRes, seoRes] = await Promise.all([
         updateContent(trimmedUrl),
         addContent(trimmedUrl),
@@ -88,12 +95,13 @@ export default function Dashboard() {
         update: updateRes,
         add: addRes,
         errorLinks: errorRes,
-        seo: seoRes
+        seo: seoRes,
+        workingDir
       });
-      // Navigate to a results page (e.g., updatecontent page)
+      // Navigate to a results page (for example, /updatecontent)
       router.push('/updatecontent');
     } catch (error) {
-      console.error("Error fetching analysis data:", error);
+      console.error("Error during analysis:", error);
     } finally {
       setLoading(false);
     }
@@ -105,7 +113,7 @@ export default function Dashboard() {
         Dashboard
       </Title>
       <Text align="center" color="dimmed" mt={10}>
-        Enter a website URL to analyze.
+        Enter a website URL to analyze and specify your project working directory.
       </Text>
       <Card
         shadow="xl"
@@ -127,8 +135,16 @@ export default function Dashboard() {
             radius="md"
             size="md"
           />
+          <TextInput
+            placeholder="Enter project working directory"
+            label="Project Working Directory"
+            value={workingDir}
+            onChange={(e) => setWorkingDir(e.target.value)}
+            radius="md"
+            size="md"
+          />
           <Button onClick={handleSubmit} fullWidth radius="md">
-            Analyze URL
+            Setup Aider and Analyze URL
           </Button>
         </Stack>
       </Card>
@@ -166,6 +182,11 @@ export default function Dashboard() {
             {typedText}
           </div>
         </Paper>
+      )}
+      {setupResult && (
+        <Card shadow="sm" mt={20} padding="md">
+          <Text>{setupResult}</Text>
+        </Card>
       )}
     </Container>
   );
