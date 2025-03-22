@@ -28,3 +28,4 @@ numpy==1.26.4
 uvicorn[standard]
 sse-starlette==1.6.5
 pyinstaller==5.13.0
+aider-install

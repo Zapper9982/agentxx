@@ -7,6 +7,7 @@ from scripts.content_update import process_update
 from scripts.content_addition import process_add
 from scripts.error_link import process_links
 import json
+import subprocess
 
 
 
@@ -19,7 +20,6 @@ CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
 @app.route('/scrape', methods=["GET"])
 def scrape():
-    print("hello world")
     url = request.args.get("url")
     if not url:
         return jsonify({"error": "URL parameter is required"}), 400
@@ -32,7 +32,6 @@ def scrape():
      
 @app.route('/update', methods=["GET"])
 def update():
-    print("hello world")
     url = request.args.get("url")
     if not url: 
         return jsonify({"error" : "URL parameters is required"}),400
@@ -47,7 +46,6 @@ def update():
 
 @app.route('/add', methods=["GET"])
 def add():
-    print("hello world")
     url = request.args.get("url")
     if not url:
          return jsonify({"error": "URL parameter is required"}), 400
@@ -62,7 +60,6 @@ def add():
 
 @app.route('/errorlink', methods=["GET"])
 def errorlink():
-    print("hello world")
     url = request.args.get("url")
     if not url:
          return jsonify({"error": "URL parameter is required"}), 400
@@ -80,7 +77,6 @@ def errorlink():
 
 @app.route('/seo', methods=["GET"])
 def seo():
-    print("hello world")
     url = request.args.get("url")
     if not url:
          return jsonify({"error": "URL parameter is required"}), 400
@@ -100,5 +96,38 @@ def seo():
          app.logger.error(f"Error during SEO analysis: {e}")
          return jsonify({"error": str(e)}), 500
 
+@app.route('/setup-aider', methods=["POST"])
+def setup_aider():
+    data = request.get_json()
+    working_dir = data.get("workingDir")
+    
+    if not working_dir:
+        return jsonify({"error": "Working directory is required."}), 400
+
+    try:
+        # Build the command string: change directory, export the key, and run aider
+        command = (
+            f'cd "{working_dir}" && '
+            'export GEMINI_API_KEY=AIzaSyAeGq-yW4YXVsGLNJoVJ36SpPfaSe_x9RE && '
+            'aider --model gemini/gemini-1.5-pro-latest'
+        )
+
+        result = subprocess.run(
+            command,
+            capture_output=True,
+            text=True,
+            shell=True
+        )
+
+        if result.returncode != 0:
+            return jsonify({"error": result.stderr}), 500
+
+        return jsonify({"stdout": result.stdout})
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 if __name__ == "__main__":
     app.run(debug=True, host="127.0.0.1", port=5000)
+
+
