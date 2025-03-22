@@ -8,15 +8,10 @@ from scripts.content_addition import process_add
 from scripts.error_link import process_links
 import json
 import subprocess
-
-
-
+import pexpect
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}) 
-
-
-
+CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
 @app.route('/scrape', methods=["GET"])
 def scrape():
@@ -29,12 +24,12 @@ def scrape():
         return jsonify(data)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-     
+
 @app.route('/update', methods=["GET"])
 def update():
     url = request.args.get("url")
     if not url: 
-        return jsonify({"error" : "URL parameters is required"}),400
+        return jsonify({"error": "URL parameter is required"}), 400
     try:
         scraped = scrape_website(url)
         if isinstance(scraped, str):
@@ -100,16 +95,16 @@ def seo():
 def setup_aider():
     data = request.get_json()
     working_dir = data.get("workingDir")
-    
+
     if not working_dir:
         return jsonify({"error": "Working directory is required."}), 400
 
     try:
-        # Build the command string: change directory, export the key, and run aider
+        # Prepare the command to automatically add 'app/page.tsx' to the chat
         command = (
             f'cd "{working_dir}" && '
             'export GEMINI_API_KEY=AIzaSyAeGq-yW4YXVsGLNJoVJ36SpPfaSe_x9RE && '
-            'aider --model gemini/gemini-1.5-pro-latest'
+            'echo "yes" | aider --model gemini/gemini-1.5-pro-latest --no-show-model-warnings --message "hello world"'
         )
 
         result = subprocess.run(
@@ -123,11 +118,8 @@ def setup_aider():
             return jsonify({"error": result.stderr}), 500
 
         return jsonify({"stdout": result.stdout})
-
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
     app.run(debug=True, host="127.0.0.1", port=5000)
-
-
