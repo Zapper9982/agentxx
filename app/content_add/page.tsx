@@ -7,7 +7,7 @@ import { addContent } from '../utils/api';
 import { useAnalysis } from '../contexts/Analysiscontext';
 
 export default function AddContentPage() {
-  const { url } = useAnalysis();
+  const { url, analysisData  } = useAnalysis();
   const [content, setContent] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -53,15 +53,12 @@ export default function AddContentPage() {
   useEffect(() => {
     if (url) {
       setLoading(true);
-      addContent(url)
-        .then((data) => {
-          const filtered = Array.isArray(data) ? data.filter((item) => item.analysis) : [];
-          setContent(filtered);
-        })
-        .catch((error) => console.error('Error fetching data:', error))
-        .finally(() => setLoading(false));
+      const thatData = analysisData.add;
+      const filtered = Array.isArray(thatData) ? thatData.filter((item) => item.analysis) : [];
+      setContent(filtered);
+      setLoading(false);
     }
-  }, [url]);
+  }, [url, analysisData]);
 
   if (!url) {
     return (
