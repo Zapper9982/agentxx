@@ -72,17 +72,10 @@ export default function SEOPage() {
 
   // Automatically run SEO analysis if URL exists and SEO data is not yet loaded.
   useEffect(() => {
-    if (url && !analysisData?.seoReport) {
-      handleSEOAnalysis();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [url]);
-
-  const handleSEOAnalysis = async () => {
     if (!url) return;
     setLoading(true);
     try {
-      const data = await analyzeSEO(url);
+      const data = analysisData.seo;
       // Store the SEO results in context
       setAnalysisData({
         ...analysisData,
@@ -95,7 +88,8 @@ export default function SEOPage() {
     } finally {
       setLoading(false);
     }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [url, analysisData.seo]);
 
   // Extract SEO data from context for display.
   const seoReport = analysisData?.seoReport;
@@ -109,9 +103,7 @@ export default function SEOPage() {
       </Title>
       <Stack gap={16} mt="md">
         {/* Re-run analysis button */}
-        <Button onClick={handleSEOAnalysis} fullWidth radius="md">
-          Analyze SEO
-        </Button>
+      
       </Stack>
 
       {loading && (
