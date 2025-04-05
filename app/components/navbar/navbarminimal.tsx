@@ -28,26 +28,27 @@ export function NavbarMinimal() {
 
   // Use <Link> instead of <a> to enable client-side navigation
   const links = data.map((item) => (
-    <Link
-      key={item.label}
-      href={item.link}
-      className={`${classes.link} ${pathname === item.link ? classes.active : ''}`}
-    >
-      <item.icon className={classes.linkIcon} stroke={1.5} />
-      <span>{item.label}</span>
-    </Link>
+    <li key={item.label}>
+      <Link
+        href={item.link}
+        className={`${classes.link} ${pathname === item.link ? classes.active : ''}`}
+      >
+        <item.icon className={classes.linkIcon} stroke={1.5} />
+        <span>{item.label}</span>
+      </Link>
+    </li>
   ));
 
   return (
     <nav className={classes.navbar}>
       <div className={classes.navbarMain}>
         <Group className={classes.header} justify="space-between">
-          <Code fw={700}>v3.1.2</Code>
+          <Code fw={700} className={classes.version}>v3.1.2</Code>
+          <ActionToggle />
         </Group>
-        {links}
-      </div>
-      <div>
-        <ActionToggle />
+        <ul className={classes.linkList}>
+          {links}
+        </ul>
       </div>
     </nav>
   );
