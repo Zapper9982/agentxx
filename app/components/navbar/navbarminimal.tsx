@@ -43,7 +43,7 @@ export function NavbarMinimal() {
     <nav className={classes.navbar}>
       <div className={classes.navbarMain}>
         <Group className={classes.header} justify="space-between">
-          <Code fw={700} className={classes.version}>v3.1.2</Code>
+          <span className={classes.logo}>My App</span>
           <ActionToggle />
         </Group>
         <ul className={classes.linkList}>
@@ -51,10 +51,15 @@ export function NavbarMinimal() {
         </ul>
         <style jsx>{`
           .navbar {
-            background-color: #f7f7f7;
+            background-color: #333;
             padding: 1rem;
-            border-bottom: 1px solid #ddd;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-bottom: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+          }
+          .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fff;
           }
           .navbarMain {
             max-width: 1200px;
@@ -72,7 +77,18 @@ export function NavbarMinimal() {
             padding: 0;
             display: flex;
             flex-wrap: wrap;
-            justify-content: center;
+            justify-content: space-between;
+          }
+          .linkList li {
+            margin: 0 1rem;
+          }
+          .linkList a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.2s ease;
+          }
+          .linkList a:hover {
+            color: #ccc;
           }
           .linkList li {
             margin: 0 1rem;
