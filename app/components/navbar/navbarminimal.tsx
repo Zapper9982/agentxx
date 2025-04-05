@@ -71,10 +71,10 @@ export function NavbarMinimal() {
             padding: 0;
             display: flex;
             flex-wrap: wrap;
-            justify-content: center;
+            justify-content: space-around;
           }
           .linkList li {
-            margin: 0 1rem;
+            margin: 0 2rem;
           }
           .linkList a {
             color: #333;
