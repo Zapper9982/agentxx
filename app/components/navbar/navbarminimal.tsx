@@ -49,6 +49,41 @@ export function NavbarMinimal() {
         <ul className={classes.linkList}>
           {links}
         </ul>
+        <style jsx>{`
+          .navbar {
+            background-color: #f0f0f0;
+            padding: 1rem;
+            border-bottom: 1px solid #ddd;
+          }
+          .navbarMain {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+          }
+          .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          }
+          .linkList {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+          }
+          .linkList li {
+            margin: 0 1rem;
+          }
+          .linkList a {
+            color: #333;
+            text-decoration: none;
+          }
+          .linkList a:hover {
+            color: #666;
+          }
+        `}</style>
       </div>
     </nav>
   );
