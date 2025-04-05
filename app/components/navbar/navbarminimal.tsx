@@ -51,9 +51,10 @@ export function NavbarMinimal() {
         </ul>
         <style jsx>{`
           .navbar {
-            background-color: #f0f0f0;
+            background-color: #f7f7f7;
             padding: 1rem;
             border-bottom: 1px solid #ddd;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
           }
           .navbarMain {
             max-width: 1200px;
@@ -71,14 +72,15 @@ export function NavbarMinimal() {
             padding: 0;
             display: flex;
             flex-wrap: wrap;
-            justify-content: space-around;
+            justify-content: center;
           }
           .linkList li {
-            margin: 0 2rem;
+            margin: 0 1rem;
           }
           .linkList a {
             color: #333;
             text-decoration: none;
+            transition: color 0.2s ease;
           }
           .linkList a:hover {
             color: #666;
