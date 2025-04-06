@@ -43,10 +43,10 @@ export function NavbarMinimal() {
     <nav className={classes.navbar}>
       <div className={classes.navbarMain}>
         <Group className={classes.header} justify="space-between" align="center" px="md">
-          <span className={classes.logo} style={{ fontSize: '2rem', fontWeight: 'bold', letterSpacing: '0.1rem', color: '#fff' }}>My App</span>
+          <span className={classes.logo} style={{ fontSize: '2.5rem', fontWeight: 'bold', letterSpacing: '0.1rem', color: '#fff', textDecoration: 'none' }}>My App</span>
           <ActionToggle size="lg" style={{ marginLeft: '1rem' }} />
         </Group>
-        <ul className={classes.linkList} style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', padding: '1rem', gap: '1rem' }}>
+        <ul className={classes.linkList} style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', padding: '1.5rem', gap: '2rem' }}>
           {links}
         </ul>
         <style jsx>{`
@@ -96,12 +96,12 @@ export function NavbarMinimal() {
             margin: 0 1rem;
           }
           .linkList a {
-            color: #333;
+            color: #fff;
             text-decoration: none;
             transition: color 0.2s ease;
           }
           .linkList a:hover {
-            color: #666;
+            color: #ccc;
           }
         `}</style>
       </div>
