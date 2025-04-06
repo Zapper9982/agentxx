@@ -43,10 +43,10 @@ export function NavbarMinimal() {
     <nav className={classes.navbar}>
       <div className={classes.navbarMain}>
         <Group className={classes.header} justify="space-between" align="center" px="md">
-          <span className={classes.logo} style={{ fontSize: '2.5rem', fontWeight: 'bold', letterSpacing: '0.1rem', color: '#fff', textDecoration: 'none' }}>My App</span>
+          <span className={classes.logo} style={{ fontSize: '2.5rem', fontWeight: 'bold', letterSpacing: '0.1rem', color: '#fff', textDecoration: 'none', textShadow: '0px 0px 10px rgba(255, 255, 255, 0.5)' }}>My App</span>
           <ActionToggle size="lg" style={{ marginLeft: '1rem' }} />
         </Group>
-        <ul className={classes.linkList} style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', padding: '1.5rem', gap: '2rem' }}>
+        <ul className={classes.linkList} style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', padding: '1.5rem', gap: '2rem', backgroundColor: 'rgba(0, 0, 0, 0.2)', borderRadius: '10px' }}>
           {links}
         </ul>
         <style jsx>{`
@@ -88,6 +88,7 @@ export function NavbarMinimal() {
             text-decoration: none;
             transition: color 0.2s ease;
             font-weight: bold;
+            text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.5);
           }
           .linkList a:hover {
             color: #ccc;
