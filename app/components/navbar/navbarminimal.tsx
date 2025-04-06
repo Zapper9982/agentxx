@@ -43,10 +43,10 @@ export function NavbarMinimal() {
     <nav className={classes.navbar}>
       <div className={classes.navbarMain}>
         <Group className={classes.header} justify="space-between" align="center">
-          <span className={classes.logo} style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>My App</span>
+          <span className={classes.logo} style={{ fontSize: '2rem', fontWeight: 'bold', letterSpacing: '0.1rem' }}>My App</span>
           <ActionToggle style={{ marginLeft: '1rem' }} />
         </Group>
-        <ul className={classes.linkList} style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
+        <ul className={classes.linkList} style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', padding: '1rem' }}>
           {links}
         </ul>
         <style jsx>{`
@@ -78,17 +78,22 @@ export function NavbarMinimal() {
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
+            gap: 1rem;
           }
           .linkList li {
             margin: 0 1rem;
           }
           .linkList a {
-            color: #fff;
+            color: #333;
             text-decoration: none;
             transition: color 0.2s ease;
+            font-weight: bold;
           }
           .linkList a:hover {
-            color: #ccc;
+            color: #666;
+            background-color: #f0f0f0;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
           }
           .linkList li {
             margin: 0 1rem;
