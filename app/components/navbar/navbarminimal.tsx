@@ -42,11 +42,11 @@ export function NavbarMinimal() {
   return (
     <nav className={classes.navbar}>
       <div className={classes.navbarMain}>
-        <Group className={classes.header} justify="space-between">
-          <span className={classes.logo}>My App</span>
-          <ActionToggle />
+        <Group className={classes.header} justify="space-between" align="center">
+          <span className={classes.logo} style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>My App</span>
+          <ActionToggle style={{ marginLeft: '1rem' }} />
         </Group>
-        <ul className={classes.linkList}>
+        <ul className={classes.linkList} style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
           {links}
         </ul>
         <style jsx>{`
