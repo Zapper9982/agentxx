@@ -107,7 +107,8 @@ def setup_aider():
     'echo "yes" | aider --model groq/llama3-70b-8192 --no-show-model-warnings --message "Update the navbar so that it looks more beautiful and elegant and do it according to yourself, make sure u only change one file tho." && '
     'git add . && '
     'git commit -m "Updated navbar for better design" && '
-    'git push origin main && '
+    'git checkout -b test-pr &&'
+    'git push origin test-pr && '
     'gh pr create --title "Updated Navbar UI" --body "Updated the navbar to make it more elegant and visually appealing." --base main'
          )
 
