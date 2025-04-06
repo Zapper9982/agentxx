@@ -84,16 +84,13 @@ export function NavbarMinimal() {
             margin: 0 1rem;
           }
           .linkList a {
-            color: #333;
+            color: #fff;
             text-decoration: none;
             transition: color 0.2s ease;
             font-weight: bold;
           }
           .linkList a:hover {
-            color: #666;
-            background-color: #f0f0f0;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
+            color: #ccc;
           }
           .linkList li {
             margin: 0 1rem;
